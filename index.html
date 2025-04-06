@@ -240,6 +240,16 @@
                 <label><input type="radio" name="duration" value="Full-day"> Full-day</label>
             </div>
 
+            <!-- New Physical Abilities input -->
+            <label for="physical-abilities">Physical Abilities (Rate from 1 to 5):</label>
+            <div class="radio-group" id="physical-abilities">
+                <label><input type="radio" name="physical-abilities" value="1" id="1/5"> 1</label>
+                <label><input type="radio" name="physical-abilities" value="2" id="2/5"> 2</label>
+                <label><input type="radio" name="physical-abilities" value="3" id="3/5"> 3</label>
+                <label><input type="radio" name="physical-abilities" value="4" id="4/5"> 4</label>
+                <label><input type="radio" name="physical-abilities" value="5" id="5/5" checked> 5</label>
+            </div>
+
             <button type="submit">Generate Hunt</button>
         </form>
 
@@ -275,9 +285,10 @@
             var locations = Array.from(document.querySelectorAll('input[name="locations"]:checked')).map(input => input.value).join(', ');
             var participants = document.querySelector('input[name="participants"]:checked').value;
             var duration = document.querySelector('input[name="duration"]:checked').value;
+            var physicalAbilities = document.querySelector('input[name="physical-abilities"]:checked').value;  // Get the physical abilities value
 
             // Validate inputs
-            if (!audience || !participants || !duration) {
+            if (!audience || !participants || !duration || !physicalAbilities) {
                 document.getElementById("errorMessage").textContent = "Please fill in all fields.";
                 document.getElementById("errorMessage").style.display = "block";
                 document.getElementById("loading").style.display = "none"; // Hide spinner on error
@@ -285,7 +296,7 @@
             }
 
             // Generate the prompt
-            var prompt = "Generate a scavenger hunt for " + audience + " audience, with the following locations: " + locations + ". The number of participants is: " + participants + " and the duration is: " + duration + ". Put ' <br><br> ' after every sentence. The challenges in the locations selected should relate to the City Museum St. Louis. Give the answers if you know them.";
+            var prompt = "Generate a scavenger hunt for " + audience + " audience, with the following locations: " + locations + ". The number of participants is: " + participants + ", the duration is: " + duration + ". The physical abilities level is: " + physicalAbilities + ". IMPORTANT: Put ' <br><br> ' after every sentence. The challenges in the locations selected should relate to the City Museum St. Louis. Give the answers if you know them.";
 
             // Call Puter AI chat API
             puter.ai.chat(
