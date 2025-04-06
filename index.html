@@ -7,6 +7,10 @@
     <title>Muse AI</title>
     <style>
         /* Global Styles */
+        html{
+            min-height: 100%;
+            overflow-y: scroll;
+        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f5f5f5;
@@ -28,7 +32,26 @@
             border-radius: 12px;
             text-align: center;
             transition: transform 0.3s ease;
+            position: relative; /* Ensure the result stays inside the container */
         }
+
+        .result {
+            text-align: center;
+            margin-top: 10px;
+            background-color: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 18px;
+            line-height: 1.6;
+            color: #388e3c;
+            display: none;
+            max-height: 400px;  /* Set max height for result box */
+            overflow-y: auto;   /* Enable scrolling if content overflows */
+            text-align: left;   /* Align content to the left for readability */
+            position: relative; /* Ensure it stays within its parent container */
+            z-index: 1;         /* Make sure it appears above other content */
+        }
+
 
         .container:hover {
             transform: translateY(-5px);
@@ -90,7 +113,7 @@
             background-color: #303f9f;
         }
 
-        .result, .reset {
+        .reset {
             margin-top: 10px;
             background-color: #e8f5e9;
             padding: 20px;
