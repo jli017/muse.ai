@@ -7,7 +7,6 @@
     <title>Muse AI</title>
     <link rel="icon" type="image/x-icon" href="0.png">
     <style>
-        /* Global Styles */
         html{
             height: 100%;
             overflow-y: scroll;
@@ -34,7 +33,7 @@
             border-radius: 12px;
             text-align: center;
             transition: transform 0.3s ease;
-            position: relative; /* Ensure the result stays inside the container */
+            position: relative;
         }
 
         .result {
@@ -47,11 +46,11 @@
             line-height: 1.6;
             color: #388e3c;
             display: none;
-            max-height: 400px;  /* Set max height for result box */
-            overflow-y: auto;   /* Enable scrolling if content overflows */
-            text-align: left;   /* Align content to the left for readability */
-            position: relative; /* Ensure it stays within its parent container */
-            z-index: 1;         /* Make sure it appears above other content */
+            max-height: 400px; 
+            overflow-y: auto;
+            text-align: left;
+            position: relative;
+            z-index: 1;    
         }
 
 
@@ -173,19 +172,52 @@
         }
 
         @media (max-width: 480px) {
-            h1 {
-                font-size: 28px;
-            }
+    .radio-group, .checkbox-group {
+        flex-direction: column;
+        gap: 10px;
+    }
 
-            button {
-                font-size: 14px;
-                padding: 12px 24px;
-            }
+    input[type="text"], select, .radio-group input, .checkbox-group input {
+        font-size: 14px;
+        padding: 10px;
+    }
 
-            label {
-                font-size: 16px;
-            }
-        }
+    .checkbox-group label, .radio-group label {
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+    }
+
+    .container {
+        padding: 15px;
+        border-radius: 10px;
+    }
+
+    .result, .reset, .error {
+        font-size: 16px;
+        padding: 15px;
+    }
+
+    .spinner {
+        width: 30px;
+        height: 30px;
+        border-width: 3px;
+    }
+
+    button {
+        padding: 12px 20px;
+    }
+
+    label {
+        font-size: 15px;
+    }
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+}
+
 
     </style>
 </head>
@@ -194,7 +226,6 @@
     <div class="container">
         <h1>Muse AI</h1>
         
-        <!-- Form to input the scavenger hunt parameters -->
         <form id="huntForm">
             <label for="audience">Audience:</label>
             <div class="radio-group" id="audience">
@@ -241,7 +272,6 @@
                 <label><input type="radio" name="duration" value="Full-day"> Full-day</label>
             </div>
 
-            <!-- New Physical Abilities input -->
             <label for="physical-abilities">Physical Abilities (Rate from 1 to 5):</label>
             <div class="radio-group" id="physical-abilities">
                 <label><input type="radio" name="physical-abilities" value="1" id="1/5"> 1</label>
@@ -254,41 +284,34 @@
             <button type="submit">Generate Hunt</button>
         </form>
 
-        <!-- Loading Spinner -->
         <div class="loading" id="loading">
             <div class="spinner"></div>
             <p>Generating hunt...</p>
         </div>
 
-        <!-- The result will be shown here -->
         <div class="result" id="huntResult" style="display: none;"></div>
 
         <div class="error" id="errorMessage" style="display: none;"></div>
         <div class="reset" id="reset" style="display: none;">
-            <a href=index.html><button>Reset</button></a>
+            <a href=index1.html><button>Reset</button></a>
         </div>
     </div>
 
     <script>
-        // Handle the form submission
         document.getElementById("huntForm").addEventListener("submit", function(event) {
             event.preventDefault(); // Prevent form from submitting normally
 
-            // Clear previous result or error messages
             document.getElementById("huntResult").style.display = "none";
             document.getElementById("errorMessage").style.display = "none";
 
-            // Show the loading spinner
             document.getElementById("loading").style.display = "block";
-
-            // Get the input values
+            
             var audience = document.querySelector('input[name="audience"]:checked').value;
             var locations = Array.from(document.querySelectorAll('input[name="locations"]:checked')).map(input => input.value).join(', ');
             var participants = document.querySelector('input[name="participants"]:checked').value;
             var duration = document.querySelector('input[name="duration"]:checked').value;
             var physicalAbilities = document.querySelector('input[name="physical-abilities"]:checked').value;  // Get the physical abilities value
 
-            // Validate inputs
             if (!audience || !participants || !duration || !physicalAbilities) {
                 document.getElementById("errorMessage").textContent = "Please fill in all fields.";
                 document.getElementById("errorMessage").style.display = "block";
@@ -296,28 +319,21 @@
                 return;
             }
 
-            // Generate the prompt
             var prompt = "Generate a scavenger hunt for " + audience + " audience, with the following locations: " + locations + ". The number of participants is: " + participants + ", the duration is: " + duration + ". The physical abilities level is: " + physicalAbilities + ". IMPORTANT: Put ' <br><br> ' after every sentence. The challenges in the locations selected should relate to the City Museum St. Louis. Give the answers if you know them.";
 
-            // Call Puter AI chat API
             puter.ai.chat(
                 prompt,
                 { model: "gpt-4o" }
             ).then(response => {
-                // Hide loading spinner
                 document.getElementById("loading").style.display = "none";
 
-                // Log the response for debugging
                 console.log('API Response:', response);
 
-                // Display the result in the huntResult div
                 document.getElementById("huntResult").innerHTML = response;
                 document.getElementById("huntResult").style.display = "block";
                 document.getElementById("reset").style.display = "block";
             }).catch(error => {
-                // Hide loading spinner on error
                 document.getElementById("loading").style.display = "none";
-                // Show error message
                 document.getElementById("errorMessage").textContent = "There was an error generating the hunt. Please try again.";
                 document.getElementById("errorMessage").style.display = "block";
             });
